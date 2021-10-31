@@ -20,7 +20,7 @@ The code is implemented based on [Gemini API](https://docs.gemini.com/rest-api/)
 - Desired frequency under cron format (including seconds, example: * */5 * * * *). Tools: [Crontabkit](https://crontabkit.com/)
 
 3. Deploy Azure Resource Manager Template
-
+Click button below will bring you to Azure portal 😁
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fguangying94%2Fgemini-scedule-order%2Fmain%2Fazure-infra-code%2Fmain.json)
 
 Parameters required:
