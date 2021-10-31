@@ -8,7 +8,7 @@ The code is implemented based on [Gemini API](https://docs.gemini.com/rest-api/)
 ## How to deploy
 1. Obtain an Azure Account. You can either use existing valid Azure account, or get a free [Azure Account](https://azure.microsoft.com/en-us/free/).
 
-| :point_up:    | We are deploying Azure Functions, which is covered under "Always Free" tier within 1 million transactions. |
+| :point_up:    | Azure Functions is covered under "Always Free" tier within 1M transactions. |
 |---------------|:------------------------|
 
 | :memo:    | An Azure Storage Account is needed to store state, the cost should be minimal (< $0.05 a month). |
@@ -42,7 +42,9 @@ Gemini supports regular purchase as well, but it applies Web Fees ( > $0.99 per 
 
 If you haven't open a Gemini account, you can consider to use my [referral](https://www.gemini.com/share/keq5wgeur) to open an account.
 
-Or, you can [buy me a coffee](buymeacoffee.com/marcustee) if the instruction above helps!
+Or, you can [buy me a coffee](https://buymeacoffee.com/marcustee) if the instruction above helps!
+
+Happy DCA (Dollar Cost Averaging) + HODL!
 
 ## References
 [Azure Functions - Python Developer Guide](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-python?tabs=azurecli-linux%2Capplication-level)
