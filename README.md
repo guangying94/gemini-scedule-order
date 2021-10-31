@@ -15,7 +15,7 @@ The code is implemented based on [Gemini API](https://docs.gemini.com/rest-api/)
 |---------------|:------------------------|
 
 2. Prepare the following information.
-- Gemini API Key (Create this in Gemini, select **Account** instead of master)
+- Gemini API Key (Create this in Gemini, select **Primary** scope instead of master, and at least enable Trading under API key settings)
 - Gemini API Secret
 - Desired frequency under cron format (including seconds, example: * */5 * * * *). Tools: [Crontabkit](https://crontabkit.com/)
 
