@@ -1,0 +1,198 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+  },
+  "parameters": {
+    "resource_group": {
+      "type": "string",
+      "metadata": {
+          "displayName": "Resource Group name in Azure"
+      }
+  },
+  "location": {
+      "type": "string",
+      "defaultValue": "[deployment().location]",
+      "metadata": {
+          "displayName": "Azure resources location"
+      }
+  },
+  "invest_amount": {
+      "type": "string",
+      "metadata": {
+          "displayName": "Order amount, currency follows the symbol"
+      }
+  },
+  "invest_symbol": {
+      "type": "string",
+      "metadata": {
+          "displayName": "Purchase pair, for example: btcusd"
+      }
+  },
+  "order_threshold": {
+      "type": "string",
+      "metadata": {
+          "displayName": "Threshold to place order in percentage. Example: 0.99 means place order with current price * 0.99"
+      }
+  },
+  "gemini_api_key": {
+      "type": "string",
+      "metadata": {
+          "displayName": "API key from Gemini. Requires account key instead of master key"
+      }
+  },
+  "gemini_api_secret": {
+      "type": "securestring",
+      "metadata": {
+          "displayName": "API secret from Gemini"
+      }
+  },
+  "order_schedule": {
+      "type": "string",
+      "metadata": {
+          "displayName": "Order frequency in CRON format. Example: '0 0 12 * * *' means run every day at 12pm UTC"
+      }
+  }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2021-04-01",
+      "name": "[format('{0}-RG', parameters('resource_group'))]",
+      "location": "[parameters('location')]"
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "azurefunctions",
+      "resourceGroup": "[format('{0}-RG', parameters('resource_group'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "invest_symbol": {
+            "value": "[parameters('invest_symbol')]"
+          },
+          "invest_amount": {
+            "value": "[parameters('invest_amount')]"
+          },
+          "order_threshold": {
+            "value": "[parameters('order_threshold')]"
+          },
+          "order_schedule": {
+            "value": "[parameters('order_schedule')]"
+          },
+          "gemini_api_key": {
+            "value": "[parameters('gemini_api_key')]"
+          },
+          "gemini_api_secret": {
+            "value": "[parameters('gemini_api_secret')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+          },
+          "parameters": {
+            "invest_amount": {
+              "type": "string"
+            },
+            "invest_symbol": {
+              "type": "string"
+            },
+            "order_threshold": {
+              "type": "string"
+            },
+            "gemini_api_key": {
+              "type": "string"
+            },
+            "order_schedule": {
+              "type": "string"
+            },
+            "gemini_api_secret": {
+              "type": "secureString"
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2021-06-01",
+              "name": "[uniqueString(resourceGroup().id)]",
+              "location": "[resourceGroup().location]",
+              "kind": "StorageV2",
+              "sku": {
+                "name": "Standard_LRS"
+              }
+            },
+            {
+              "type": "Microsoft.Web/sites",
+              "apiVersion": "2021-02-01",
+              "name": "[format('{0}-{1}-function', parameters('invest_symbol'), uniqueString(resourceGroup().id))]",
+              "location": "[resourceGroup().location]",
+              "kind": "functionapp,linux",
+              "properties": {
+                "httpsOnly": true,
+                "reserved": true,
+                "siteConfig": {
+                  "appSettings": [
+                    {
+                      "name": "AMOUNT",
+                      "value": "[parameters('invest_amount')]"
+                    },
+                    {
+                      "name": "API_KEY",
+                      "value": "[parameters('gemini_api_key')]"
+                    },
+                    {
+                      "name": "API_SECRET",
+                      "value": "[parameters('gemini_api_secret')]"
+                    },
+                    {
+                      "name": "PERCENT",
+                      "value": "[parameters('order_threshold')]"
+                    },
+                    {
+                      "name": "SYMBOL",
+                      "value": "[parameters('invest_symbol')]"
+                    },
+                    {
+                      "name": "TIMER_SCHEDULE",
+                      "value": "[parameters('order_schedule')]"
+                    },
+                    {
+                      "name": "WEBSITE_RUN_FROM_PACKAGE",
+                      "value": "https://storageaccountperso8f5b.blob.core.windows.net/code/timer.zip"
+                    },
+                    {
+                      "name": "FUNCTIONS_WORKER_RUNTIME",
+                      "value": "python"
+                    },
+                    {
+                      "name": "FUNCTIONS_EXTENSION_VERSION",
+                      "value": "~3"
+                    },
+                    {
+                      "name": "AzureWebJobsStorage",
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', uniqueString(resourceGroup().id), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', uniqueString(resourceGroup().id)), '2021-06-01').keys[0].value)]"
+                    }
+                  ]
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', uniqueString(resourceGroup().id))]"
+              ]
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-RG', parameters('resource_group')))]"
+      ]
+    }
+  ]
+}
