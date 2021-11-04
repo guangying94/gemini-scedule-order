@@ -50,7 +50,7 @@ resource functionApp 'Microsoft.Web/sites@2021-02-01'={
         }
         {
           'name': 'WEBSITE_RUN_FROM_PACKAGE'
-          'value': 'https://storageaccountperso8f5b.blob.core.windows.net/code/timer.zip'
+          'value': 'https://4rxjlve4nq4aw.blob.core.windows.net/code/code.zip'
         }
         {
           'name': 'FUNCTIONS_WORKER_RUNTIME'
