@@ -52,7 +52,7 @@ def main(mytimer: func.TimerRequest) -> None:
     "request": "/v1/order/new",
         "nonce": payload_nonce,
         "symbol": symbol,
-        "amount": str(round(order_unit,8)),
+        "amount": str(round(order_unit,6)),
         "price": str(round(order_price,2)),
         "side": "buy",
         "type": "exchange limit"
