@@ -52,6 +52,6 @@ Happy DCA (Dollar Cost Averaging) + HODL!
 [Azure Functions - Python Developer Guide](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-python?tabs=azurecli-linux%2Capplication-level)
 
 ## Disclaimer
-This project is created for educational purpose, please invest at your own risk 😉 I'm not financial advisor or financial platform provider hence I will not be liable to anything on your investment.
+This project is created for educational purpose, please invest at your own risk 😉  I'm not financial advisor or financial platform provider hence I will not be liable to anything on your investment.
 
 However, I welcome your feedback for improvement! 
